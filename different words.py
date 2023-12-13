@@ -1,9 +1,9 @@
 '''
 Дана строка со словами из 5 букв
 http://russkiyslovar.ru/iz-5-bukv
-Выбрать слова максимально различающиеся по буквам
+Выбрать слова с максимально различающиеся по буквам
 '''
-from numba import njit
+# from numba import njit
 from copy import deepcopy
 
 cyrillic_lower_letters:str = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
@@ -31,6 +31,9 @@ diff_words = [new_lst[0]]
 print(diff_words)
 
 def delete_chr_from_str(cyrillic_lower_letters:str,s:str)->str:
+    '''
+    удаляем из списка кириллических символов (cyrillic_lower_letters) буквы из s
+    '''
     sn = deepcopy(cyrillic_lower_letters)
     for s1 in s:
         if s1 in sn:
@@ -38,35 +41,41 @@ def delete_chr_from_str(cyrillic_lower_letters:str,s:str)->str:
             cyrillic_lower_letters = cyrillic_lower_letters.replace(s1, '')
     return cyrillic_lower_letters
 
+def all_chr_in_str(cyrillic_lower_letters:str,s:str)->bool:
+    '''
+    проверяем, что все буквы из списка кириллических символов (cyrillic_lower_letters) есть в s
+    '''
+    res = [s1 in cyrillic_lower_letters for s1 in s]
+    return all(res)
 
-@njit
-def find_different_words(new_lst:list[str]):
+def thetest_all_chr_in_str():
+    s = 'вдеть'
+    global cyrillic_lower_letters
+    print(f'До удаления {cyrillic_lower_letters=}')
+    print('До удаления all_chr_in_str = ', all_chr_in_str(cyrillic_lower_letters, s))
+    cyrillic_lower_letters=delete_chr_from_str(cyrillic_lower_letters,s)
+    print(f'После удаления {cyrillic_lower_letters=}')
+    print('После удаления all_chr_in_str = ',all_chr_in_str(cyrillic_lower_letters, s))
+
+
+def find_different_words(cyrillic_lower_letters, new_lst:list[str]):
     # https://www.cyberforum.ru/python-beginners/thread2695448.html
     s_3:str = ''
     new_lst_len:int = len(new_lst)
-    diff_words:set = {new_lst[0]}
-    global cyrillic_lower_letters
+    diff_words:list = [new_lst[0]] # вывбираем первое слово (с неповторяющимися буквами)
+    cyrillic_lower_letters = delete_chr_from_str(cyrillic_lower_letters, new_lst[0]) # Удаляем буквы первого слова
     print('Big Cycle')
-    for i in range(1,new_lst_len):
+    for i in range(1,new_lst_len): # перебор по всем словам в общем списке
         print(i,' from', new_lst_len)
-        for s_2 in diff_words:
-            res_max = 0
-            for j in range(i,new_lst_len):
-                if
-                res = len(set(new_lst[j]) - set(s_2)) + len(set(s_2) - set(new_lst[j]))
-                if res > res_max:
-                    res_max = res
-                    s_3 = new_lst[j]
-            diff_words.append(s_3)
-
-            print(diff_words)
+        if all_chr_in_str(cyrillic_lower_letters,new_lst[i]):
+            diff_words.append(new_lst[i])
+            res_max = 0 # перебор по всем словам в целевом списке
+            cyrillic_lower_letters = delete_chr_from_str(cyrillic_lower_letters,new_lst[i])
 
     print('len(diff_words)=',len(diff_words))
     print(diff_words)
+    print('Отстатки букв = ',cyrillic_lower_letters)
 
-find_different_words(new_lst)
+# thetest_all_chr_in_str()
 
-print(f'{cyrillic_lower_letters=}')
-cyrillic_lower_letters=delete_chr_from_str(cyrillic_lower_letters,'вдеть')
-print(f'{cyrillic_lower_letters=}')
-# print(delete_chr_from_str('вдеть')):
+find_different_words(cyrillic_lower_letters, new_lst)
