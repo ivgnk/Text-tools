@@ -11,8 +11,8 @@ def one_image_conversion():
     png_image.save("output.png")
 
 def many_image_conversion():
-    webp_dir = "book1-webp"
-    png_dir = "book1-png"
+    webp_dir = "book2-webp"
+    png_dir = "book2-png"
     os.makedirs(png_dir, exist_ok=True)
     curri = 0
     for filename in os.listdir(webp_dir):
@@ -25,4 +25,3 @@ def many_image_conversion():
 
 if __name__ == "__main__":
     many_image_conversion()
-
