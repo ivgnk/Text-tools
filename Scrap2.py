@@ -16,8 +16,8 @@ def get_params_from_json()-> (str, str):
     config = ConfigParser()
     config.read('Scrap2_config.ini')
     a = config.get('main', 'base_url'); base_url_ = a.strip(); print(f'{base_url_=}')
-    a = config.get('main', 'folder');  folder_ = a.strip(); print(f'{folder_=}')
-    return base_url_, folder_
+    a = config.get('main', 'folder');  result_folder_ = a.strip(); print(f'{result_folder_=}')
+    return base_url_, result_folder_
 
 base_url_, folder_    = get_params_from_json()
 # https://python-lab.ru/vyhod-i-zavershenie-programmy-v-python
