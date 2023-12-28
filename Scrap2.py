@@ -8,7 +8,7 @@ https://tonais.ru/file/skachivanie-faylov-v-python
 '''
 
 import urllib.request
-from pstring import swlz
+# from pstring import swlz
 from configparser import ConfigParser
 import sys
 
@@ -22,10 +22,11 @@ def get_params_from_json()-> (str, str):
 base_url_, folder_    = get_params_from_json()
 # https://python-lab.ru/vyhod-i-zavershenie-programmy-v-python
 # sys.exit(0)
-for i in range(1,22): # 1,285
+for i in range(1,12): # 1,285
     print(i)
     fsn = 'page-'+str(i)
-    fdn = 'page-'+ swlz(i, 3)
+    # https://ru.stackoverflow.com/questions/628701/Вывод-числа-с-ведущими-нолями
+    fdn = 'page-'+ str(i).zfill(3)
     curr_url = base_url_+fsn
     res_fn = folder_+fdn+'.webp'
     urllib.request.urlretrieve(curr_url,res_fn)
